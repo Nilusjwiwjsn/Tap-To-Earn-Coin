@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin Collector</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000; /* Solid black background */
+            margin: 0;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .coin-counter {
+            font-size: 28px; /* Reduced font size */
+            margin-bottom: 100px; /* Increased space between counter and button */
+            padding: 10px 20px; /* Adjusted padding */
+            background: linear-gradient(135deg, #00ff00, #000000); /* Black and green gradient */
+            border-radius: 15px; /* Increased border radius */
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.6), 0 0 20px rgba(0, 0, 0, 0.6); /* Enhanced glowing effect */
+            display: flex;
+            align-items: center;
+            color: white; /* Ensure text is readable */
+            position: relative; /* Allow for positioning adjustments */
+            top: -20px; /* Move coin score upwards */
+        }
+
+        .coin-counter span {
+            font-size: 28px; /* Match font size to updated coin-counter size */
+            margin-right: 15px; /* Space between coin emoji and score */
+        }
+
+        .coin-button-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 200px; /* Increased size */
+            height: 200px; /* Increased size */
+        }
+
+        .coin-button {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden; /* Ensure VFX doesn't spill outside the button */
+            background: linear-gradient(135deg, rgba(233, 30, 99, 0.8), rgba(233, 30, 99, 0)); /* Vibrant pink gradient */
+            box-shadow: 0 0 30px rgba(233, 30, 99, 0.8), 0 0 40px rgba(233, 30, 99, 0.6); /* Enhanced glowing effect */
+            transform-style: preserve-3d; /* 3D effect */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Smooth transformation and shadow transition */
+        }
+
+        .coin-button:hover {
+            transform: scale(1.1); /* Slight zoom on hover */
+            box-shadow: 0 0 50px rgba(233, 30, 99, 1), 0 0 70px rgba(233, 30, 99, 0.8); /* Stronger glow on hover */
+        }
+
+        .coin-button-text {
+            color: white;
+            font-size: 80px; /* Increased font size for the button emoji */
+            font-weight: bold;
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.9); /* Enhanced glowing text effect */
+        }
+
+        /* Enhanced VFX Background Animation */
+        .coin-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 500%; /* Increased size for stronger effect */
+            height: 500%; /* Increased size for stronger effect */
+            background: radial-gradient(circle, rgba(0, 0, 255, 0.5), rgba(0, 0, 255, 0) 70%); /* Blue radial gradient shadow */
+            transform: translate(-50%, -50%);
+            opacity: 0.8; /* Increased opacity */
+            filter: blur(30px); /* Increased blur for a more intense effect */
+            animation: pulse 2s infinite; /* Continuous animation */
+            z-index: -1;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 0.4;
+            }
+            100% {
+                transform: scale(0.9);
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes vibrateLeft {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(0); }
+        }
+
+        @keyframes vibrateRight {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(10px); }
+            40% { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="coin-counter" id="coinCounter">
+            <span>🪙</span> Coins: 0
+        </div>
+
+        <div class="coin-button-wrapper">
+            <div class="coin-button" id="coinButton" onclick="collectCoin(event)">
+                <div class="coin-button-text">🦊</div> <!-- Ice cube emoji -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let coinCount = 0;
+
+        function collectCoin(event) {
+            coinCount++;
+            document.getElementById('coinCounter').innerText = `🪙 Coins: ${coinCount}`;
+
+            const button = document.getElementById('coinButton');
+            const buttonRect = button.getBoundingClientRect();
+            const clickX = event.clientX - buttonRect.left;
+            const buttonWidth = buttonRect.width;
+
+            const vibrationDirection = clickX < buttonWidth / 2 ? 'Left' : 'Right';
+            button.style.animation = `vibrate${vibrationDirection} 0.5s`;
+
+            // Remove vibration effect after animation completes
+            setTimeout(() => {
+                button.style.animation = '';
+            }, 500);
+        }
+    </script>
+</body>
+</html>
